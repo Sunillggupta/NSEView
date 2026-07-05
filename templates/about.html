@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}About - NSE Data Dashboard{% endblock %}
+
+{% block content %}
+    <h2 class="page-title">📖 About NSE Data Dashboard</h2>
+    
+    <div style="line-height: 1.8; color: #555;">
+        <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px;">About This Application</h3>
+        <p>
+            The NSE Data Dashboard is a Python web application built with Flask that displays real-time market data 
+            from the National Stock Exchange (NSE) of India. It provides comprehensive indices information and market metrics.
+        </p>
+        
+        <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px;">Features</h3>
+        <ul style="margin-left: 20px;">
+            <li><strong>139+ Indices:</strong> Access data for NIFTY 50, NIFTY BANK, NIFTY MIDCAP, and many more</li>
+            <li><strong>Real-time Data:</strong> Current prices, changes, and percentage changes</li>
+            <li><strong>Detailed Metrics:</strong> OHLC data, P/E ratios, P/B ratios, dividend yields</li>
+            <li><strong>Performance Tracking:</strong> Daily, monthly, and yearly performance data</li>
+            <li><strong>Market Activity:</strong> Advances, declines, and unchanged counts</li>
+            <li><strong>Responsive Design:</strong> Works on desktop and mobile devices</li>
+            <li><strong>Search & Filter:</strong> Find indices quickly with search and category filters</li>
+        </ul>
+        
+        <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px;">Technical Stack</h3>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 4px;">
+            <strong>Backend:</strong> Python, Flask<br>
+            <strong>Frontend:</strong> HTML5, CSS3, JavaScript<br>
+            <strong>Data Source:</strong> NSE allIndices API<br>
+            <strong>HTTP Client:</strong> Requests library<br>
+        </div>
+        
+        <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px;">API Endpoints</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Endpoint</th>
+                    <th>Description</th>
+                    <th>Returns</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>GET /</code></td>
+                    <td>All indices in table format</td>
+                    <td>HTML</td>
+                </tr>
+                <tr>
+                    <td><code>GET /index/&lt;name&gt;</code></td>
+                    <td>Detailed view for specific index</td>
+                    <td>HTML</td>
+                </tr>
+                <tr>
+                    <td><code>GET /equity/&lt;symbol&gt;</code></td>
+                    <td>Equity quote (returns API limitation info)</td>
+                    <td>HTML</td>
+                </tr>
+                <tr>
+                    <td><code>GET /api/indices</code></td>
+                    <td>All indices data</td>
+                    <td>JSON</td>
+                </tr>
+                <tr>
+                    <td><code>GET /api/index/&lt;name&gt;</code></td>
+                    <td>Specific index data</td>
+                    <td>JSON</td>
+                </tr>
+                <tr>
+                    <td><code>GET /api/status</code></td>
+                    <td>API status and available endpoints</td>
+                    <td>JSON</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px;">Important: API Limitations</h3>
+        <div class="error-box">
+            <h4 style="margin-bottom: 10px;">Individual Equity Stock Quotes</h4>
+            <p>
+                <strong>Status:</strong> Not Available
+            </p>
+            <p>
+                NSE has blocked direct API access to individual equity stock quotes. The endpoint 
+                <code>https://www.nseindia.com/api/quote-equity?symbol=SYMBOL</code> returns HTTP 403 (Access Denied).
+            </p>
+            <p style="margin-top: 10px;">
+                This application handles this limitation gracefully by:
+            </p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>Detecting the 403 error response</li>
+                <li>Returning informative status messages</li>
+                <li>Recommending alternative data sources</li>
+                <li>Providing index data as an alternative</li>
+            </ul>
+        </div>
+        
+        <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px;">Available Data</h3>
+        <div class="success-box">
+            <strong>NSE allIndices Endpoint - WORKING ✅</strong>
+            <p style="margin-top: 10px;">
+                The primary data source is NSE's official <code>/api/allIndices</code> endpoint, which provides:
+            </p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>Price data for 139+ indices</li>
+                <li>Day's OHLC (Open, High, Low, Close)</li>
+                <li>52-week High and Low</li>
+                <li>Valuation metrics (P/E, P/B ratios)</li>
+                <li>Market activity (advances, declines)</li>
+                <li>Historical performance data</li>
+            </ul>
+        </div>
+        
+        <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px;">Alternatives for Individual Stock Data</h3>
+        <p style="margin-bottom: 10px;">If you need individual equity stock quotes:</p>
+        <ol style="margin-left: 20px;">
+            <li>
+                <strong>Third-Party APIs</strong>
+                <ul style="margin-left: 20px; margin-top: 5px;">
+                    <li>Alpha Vantage - Free tier with limited requests</li>
+                    <li>Finnhub - Good coverage of Indian stocks</li>
+                    <li>IEX Cloud - Comprehensive data</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Official NSE Resources</strong>
+                <ul style="margin-left: 20px; margin-top: 5px;">
+                    <li>NSE official API (available through proper channels)</li>
+                    <li>NSE historical data downloads</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Web Scraping</strong>
+                <ul style="margin-left: 20px; margin-top: 5px;">
+                    <li>Use Selenium for JavaScript-rendered pages</li>
+                    <li>Implement polite request patterns</li>
+                    <li>Respect Terms of Service</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Local Caching</strong>
+                <ul style="margin-left: 20px; margin-top: 5px;">
+                    <li>Maintain local database of stock data</li>
+                    <li>Update periodically from reliable sources</li>
+                    <li>Serve cached data when APIs are unavailable</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px;">How to Use</h3>
+        <ol style="margin-left: 20px;">
+            <li>
+                <strong>Browse Indices:</strong> Go to the home page to see all available indices in a sortable table
+            </li>
+            <li>
+                <strong>Search Indices:</strong> Use the search box to find specific indices by name
+            </li>
+            <li>
+                <strong>Filter by Category:</strong> Use filter buttons to show specific types of indices
+            </li>
+            <li>
+                <strong>View Details:</strong> Click "Details" on any index to see comprehensive information
+            </li>
+            <li>
+                <strong>API Access:</strong> Use JSON endpoints for programmatic access
+            </li>
+        </ol>
+        
+        <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px;">Contact & Support</h3>
+        <p>
+            For questions about this application or NSE data, please refer to:
+            <ul style="margin-left: 20px;">
+                <li><a href="https://www.nseindia.com" target="_blank">NSE Official Website</a></li>
+                <li><a href="https://www.nseindia.com/apis" target="_blank">NSE API Documentation</a></li>
+            </ul>
+        </p>
+        
+        <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px;">Version & License</h3>
+        <p>
+            <strong>Application Version:</strong> 1.0<br>
+            <strong>Built With:</strong> Python Flask<br>
+            <strong>Data Source:</strong> NSE (National Stock Exchange)<br>
+        </p>
+    </div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}{{ symbol }} - Equity Quote{% endblock %}
+
+{% block content %}
+    <a href="/" class="btn btn-secondary" style="margin-bottom: 20px;">← Back to Indices</a>
+    
+    <h2 class="page-title">{{ symbol }} - Equity Stock Quote</h2>
+    
+    {% if quote.get('status') == 'blocked' %}
+        <div class="error-box">
+            <strong>⚠️ API Endpoint Blocked</strong>
+            <p style="margin-top: 10px;">{{ quote.get('message', 'Direct API access has been restricted.') }}</p>
+        </div>
+        
+        <div class="info-box">
+            <h3 style="color: #667eea; margin-bottom: 10px;">Why is this happening?</h3>
+            <p>
+                NSE (National Stock Exchange) has implemented strict API access controls and blocked the direct endpoint 
+                for fetching individual equity stock quotes. This was previously available at:
+            </p>
+            <code style="display: block; background: #f5f5f5; padding: 10px; margin: 10px 0; border-radius: 4px; overflow-x: auto;">
+                https://www.nseindia.com/api/quote-equity?symbol=SYMBOL
+            </code>
+            <p style="margin-top: 10px;">
+                However, the <strong>allIndices endpoint is still available</strong> and provides comprehensive market data 
+                for indices and broader market information.
+            </p>
+        </div>
+        
+        <div class="info-box" style="border-left-color: #28a745;">
+            <h3 style="color: #28a745; margin-bottom: 10px;">✅ What Still Works</h3>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>Index Data:</strong> NIFTY 50, NIFTY BANK, NIFTY MIDCAP, and 130+ other indices</li>
+                <li><strong>Market Metrics:</strong> P/E ratios, P/B ratios, dividend yields</li>
+                <li><strong>Price Information:</strong> Open, High, Low, Close prices for indices</li>
+                <li><strong>Performance Data:</strong> Daily, monthly, and yearly performance metrics</li>
+            </ul>
+        </div>
+        
+        <div class="info-box" style="border-left-color: #667eea;">
+            <h3 style="color: #667eea; margin-bottom: 10px;">📚 Alternative Solutions</h3>
+            <p style="margin-bottom: 10px;">To get individual stock data, you can:</p>
+            <ol style="margin-left: 20px;">
+                <li><strong>Use NSE Index Data:</strong> The indices contain thousands of stocks. Use our available index data to track market trends.</li>
+                <li><strong>Third-Party APIs:</strong>
+                    <ul style="margin-left: 20px; margin-top: 5px;">
+                        <li>Alpha Vantage - Free tier available</li>
+                        <li>Finnhub - Free tier for Indian stocks</li>
+                        <li>IEX Cloud - Comprehensive market data</li>
+                        <li>Official NSE API - Through proper channels</li>
+                    </ul>
+                </li>
+                <li><strong>Web Scraping:</strong> Use Selenium or Playwright to extract data from NSE's web pages (with proper delays to avoid server overload)</li>
+                <li><strong>Local Database:</strong> Maintain a cached database of frequently used stocks with periodic updates</li>
+            </ol>
+        </div>
+        
+        <div style="margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px;">
+                <h4>📊 View Market Data</h4>
+                <p style="margin: 10px 0; font-size: 0.9em;">Explore comprehensive indices data and market trends</p>
+                <a href="/" style="display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 8px 15px; border-radius: 4px; text-decoration: none; margin-top: 10px;">
+                    Browse Indices →
+                </a>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 20px; border-radius: 8px;">
+                <h4>🔗 Official Resources</h4>
+                <p style="margin: 10px 0; font-size: 0.9em;">Find official NSE data sources and documentation</p>
+                <a href="https://www.nseindia.com" target="_blank" style="display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 8px 15px; border-radius: 4px; text-decoration: none; margin-top: 10px;">
+                    Visit NSE Website →
+                </a>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 20px; border-radius: 8px;">
+                <h4>📖 Learn More</h4>
+                <p style="margin: 10px 0; font-size: 0.9em;">Read documentation about this limitation and solutions</p>
+                <a href="/about" style="display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 8px 15px; border-radius: 4px; text-decoration: none; margin-top: 10px;">
+                    Documentation →
+                </a>
+            </div>
+        </div>
+        
+    {% elif quote.get('status') == 'error' %}
+        <div class="error-box">
+            <strong>❌ Error</strong>
+            <p style="margin-top: 10px;">{{ quote.get('message', 'An error occurred while fetching the quote.') }}</p>
+        </div>
+        
+        <div class="info-box">
+            <strong>Note:</strong> {{ quote.get('note', 'NSE API access may be restricted.') }}
+        </div>
+        
+        <a href="/" class="btn" style="margin-top: 20px;">← Go Back to Indices</a>
+        
+    {% else %}
+        <div class="success-box">
+            <strong>✅ Partial Data Available</strong>
+            <p style="margin-top: 10px;">{{ quote.get('message', 'Data retrieved with limitations.') }}</p>
+        </div>
+    {% endif %}
+{% endblock %}

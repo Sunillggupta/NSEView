@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}NSE Indices Dashboard{% endblock %}
+
+{% block content %}
+    <h2 class="page-title">📈 NSE Indices - Market Data</h2>
+    
+    <div class="info-box">
+        <strong>Total Indices:</strong> {{ total_count }} | 
+        <strong>Last Updated:</strong> {{ timestamp if timestamp != 'N/A' else 'Real-time' }}
+    </div>
+    
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search indices by name (e.g., NIFTY 50, BANK, MIDCAP)...">
+    </div>
+    
+    <div class="filter-buttons">
+        <button class="filter-btn active" onclick="filterIndices('all')">All Indices</button>
+        <button class="filter-btn" onclick="filterIndices('derivative')">Derivatives Eligible</button>
+        <button class="filter-btn" onclick="filterIndices('broad')">Broad Market</button>
+    </div>
+    
+    <table id="indicesTable">
+        <thead>
+            <tr>
+                <th>Index Name</th>
+                <th>Last Price</th>
+                <th>Change</th>
+                <th>% Change</th>
+                <th>Open</th>
+                <th>High</th>
+                <th>Low</th>
+                <th>P/E Ratio</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            {% for idx in indices %}
+            <tr class="index-row" data-type="{% if 'DERIVATIVES' in idx.get('key', '') %}derivative{% elif 'BROAD' in idx.get('key', '') %}broad{% else %}other{% endif %}" data-name="{{ idx.get('index', '').lower() }}">
+                <td>
+                    <strong>{{ idx.get('index', 'N/A') }}</strong><br>
+                    <span style="font-size: 0.85em; color: #999;">{{ idx.get('key', '') }}</span>
+                </td>
+                <td class="price">
+                    {{ "%.2f"|format(idx.get('last', 0) | float) if idx.get('last') else 'N/A' }}
+                </td>
+                <td>
+                    {% set variation = idx.get('variation', 0) | float %}
+                    {% if variation > 0 %}
+                        <span class="positive">▲ {{ "%.2f"|format(variation) }}</span>
+                    {% elif variation < 0 %}
+                        <span class="negative">▼ {{ "%.2f"|format(variation) }}</span>
+                    {% else %}
+                        <span class="neutral">— 0.00</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% set pchange = idx.get('percentChange', 0) | float %}
+                    {% if pchange > 0 %}
+                        <span class="positive">+{{ "%.2f"|format(pchange) }}%</span>
+                    {% elif pchange < 0 %}
+                        <span class="negative">{{ "%.2f"|format(pchange) }}%</span>
+                    {% else %}
+                        <span class="neutral">0.00%</span>
+                    {% endif %}
+                </td>
+                <td>{{ "%.2f"|format(idx.get('open', 0) | float) if idx.get('open') else 'N/A' }}</td>
+                <td>{{ "%.2f"|format(idx.get('high', 0) | float) if idx.get('high') else 'N/A' }}</td>
+                <td>{{ "%.2f"|format(idx.get('low', 0) | float) if idx.get('low') else 'N/A' }}</td>
+                <td>{{ idx.get('pe', 'N/A') }}</td>
+                <td>
+                    <a href="/index/{{ idx.get('index', '') | urlencode }}" class="btn" style="padding: 6px 12px; font-size: 0.8em;">
+                        Details →
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="timestamp">
+        Data refreshes periodically from NSE API
+    </div>
+    
+    <script>
+        function filterIndices(type) {
+            const rows = document.querySelectorAll('.index-row');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter rows
+            rows.forEach(row => {
+                if (type === 'all' || row.dataset.type === type) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('.index-row');
+            
+            rows.forEach(row => {
+                const indexName = row.dataset.name;
+                if (indexName.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+{% endblock %}

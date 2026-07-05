@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Error{% endblock %}
+
+{% block content %}
+    <div style="text-align: center; padding: 40px 20px;">
+        <h2 style="color: #dc3545; font-size: 2.5em; margin-bottom: 20px;">❌ Error Occurred</h2>
+        
+        <div class="error-box" style="text-align: left; max-width: 600px; margin: 0 auto;">
+            <h3 style="color: #dc3545; margin-bottom: 10px;">Error Details</h3>
+            <code style="display: block; background: #fff5f5; padding: 15px; border-radius: 4px; overflow-x: auto; line-height: 1.5;">
+                {{ error }}
+            </code>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <h3 style="color: #667eea; margin-bottom: 15px;">What can you do?</h3>
+            <ul style="text-align: left; max-width: 500px; margin: 0 auto; margin-left: 20px;">
+                <li><a href="/">Go back to Home</a> - Browse available indices</li>
+                <li><a href="/api/status">Check API Status</a> - Verify service status</li>
+                <li><a href="/about">Read Documentation</a> - Learn more about limitations</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 4px; max-width: 600px; margin-left: auto; margin-right: auto;">
+            <h4 style="color: #667eea; margin-bottom: 10px;">💡 Tips</h4>
+            <ul style="text-align: left; margin-left: 20px;">
+                <li>Ensure you're using correct index names (e.g., "NIFTY 50" not "NIFTY50")</li>
+                <li>Check that the NSE API is accessible from your network</li>
+                <li>Note that individual equity quotes are not available (API is blocked)</li>
+                <li>Try accessing the home page to browse available indices</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

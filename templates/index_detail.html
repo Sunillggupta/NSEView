@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}{{ index.get('index', 'Index') }} - Details{% endblock %}
+
+{% block content %}
+    <a href="/" class="btn btn-secondary" style="margin-bottom: 20px;">← Back to All Indices</a>
+    
+    <h2 class="page-title">{{ index.get('index', 'N/A') }} - Detailed Information</h2>
+    
+    <div class="info-box">
+        <strong>Category:</strong> {{ index.get('key', 'N/A') }}
+    </div>
+    
+    <!-- Main Stats Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Last Price</h3>
+            <div class="value">{{ "%.2f"|format(index.get('last', 0) | float) }}</div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Change</h3>
+            <div class="value" style="{% set v = index.get('variation', 0) | float %}color: {% if v > 0 %}#28a745{% elif v < 0 %}#dc3545{% else %}#6c757d{% endif %};">
+                {% set variation = index.get('variation', 0) | float %}
+                {% if variation > 0 %}▲ +{{ "%.2f"|format(variation) }}{% elif variation < 0 %}▼ {{ "%.2f"|format(variation) }}{% else %}— 0.00{% endif %}
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Change %</h3>
+            <div class="value" style="{% set p = index.get('percentChange', 0) | float %}color: {% if p > 0 %}#28a745{% elif p < 0 %}#dc3545{% else %}#6c757d{% endif %};">
+                {% set pchange = index.get('percentChange', 0) | float %}
+                {% if pchange > 0 %}+{{ "%.2f"|format(pchange) }}%{% elif pchange < 0 %}{{ "%.2f"|format(pchange) }}%{% else %}0.00%{% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Detailed Information Table -->
+    <h3 style="margin-top: 30px; margin-bottom: 15px; color: #667eea;">OHLC Data & Metrics</h3>
+    
+    <table>
+        <tr>
+            <th>Open</th>
+            <td class="price">{{ "%.2f"|format(index.get('open', 0) | float) }}</td>
+            <th>High</th>
+            <td class="price">{{ "%.2f"|format(index.get('high', 0) | float) }}</td>
+        </tr>
+        <tr>
+            <th>Low</th>
+            <td class="price">{{ "%.2f"|format(index.get('low', 0) | float) }}</td>
+            <th>Previous Close</th>
+            <td class="price">{{ "%.2f"|format(index.get('previousClose', 0) | float) }}</td>
+        </tr>
+        <tr>
+            <th>52-Week High</th>
+            <td class="price">{{ "%.2f"|format(index.get('yearHigh', 0) | float) }}</td>
+            <th>52-Week Low</th>
+            <td class="price">{{ "%.2f"|format(index.get('yearLow', 0) | float) }}</td>
+        </tr>
+    </table>
+    
+    <h3 style="margin-top: 30px; margin-bottom: 15px; color: #667eea;">Valuation Metrics</h3>
+    
+    <table>
+        <tr>
+            <th>P/E Ratio</th>
+            <td>{{ index.get('pe', 'N/A') }}</td>
+            <th>P/B Ratio</th>
+            <td>{{ index.get('pb', 'N/A') }}</td>
+        </tr>
+        <tr>
+            <th>Dividend Yield</th>
+            <td>{{ index.get('dy', 'N/A') }}</td>
+            <th>Market Cap</th>
+            <td>N/A</td>
+        </tr>
+    </table>
+    
+    <h3 style="margin-top: 30px; margin-bottom: 15px; color: #667eea;">Market Activity</h3>
+    
+    <table>
+        <tr>
+            <th>Advances</th>
+            <td>{{ index.get('advances', 'N/A') }}</td>
+            <th>Declines</th>
+            <td>{{ index.get('declines', 'N/A') }}</td>
+        </tr>
+        <tr>
+            <th>Unchanged</th>
+            <td>{{ index.get('unchanged', 'N/A') }}</td>
+            <th>30-Day Change</th>
+            <td>{{ index.get('perChange30d', 'N/A') }}%</td>
+        </tr>
+    </table>
+    
+    <h3 style="margin-top: 30px; margin-bottom: 15px; color: #667eea;">Performance</h3>
+    
+    <table>
+        <tr>
+            <th>1-Week Ago</th>
+            <td>{{ "%.2f"|format(index.get('oneWeekAgoVal', 0) | float) if index.get('oneWeekAgoVal') else 'N/A' }}</td>
+            <th>1-Month Ago</th>
+            <td>{{ "%.2f"|format(index.get('oneMonthAgoVal', 0) | float) if index.get('oneMonthAgoVal') else 'N/A' }}</td>
+        </tr>
+        <tr>
+            <th>Previous Day</th>
+            <td>{{ "%.2f"|format(index.get('previousDayVal', 0) | float) if index.get('previousDayVal') else 'N/A' }}</td>
+            <th>1-Year Ago</th>
+            <td>{{ "%.2f"|format(index.get('oneYearAgoVal', 0) | float) if index.get('oneYearAgoVal') else 'N/A' }}</td>
+        </tr>
+        <tr>
+            <th>30-Day Change</th>
+            <td>{{ index.get('perChange30d', 'N/A') }}%</td>
+            <th>365-Day Change</th>
+            <td>{{ index.get('perChange365d', 'N/A') }}%</td>
+        </tr>
+    </table>
+    
+    <div style="margin-top: 30px; padding: 15px; background: #f8f9fa; border-radius: 4px; text-align: center;">
+        <p style="color: #666; margin-bottom: 10px;">
+            For individual equity stock quotes, alternative data sources must be used as NSE has blocked direct API access.
+        </p>
+        <a href="/about" class="btn btn-secondary">Learn More →</a>
+    </div>
+    
+    <div class="timestamp">
+        Data from NSE allIndices API
+    </div>
+{% endblock %}
