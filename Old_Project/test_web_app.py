@@ -6,7 +6,7 @@ import sys
 import time
 import threading
 import requests
-from app import app
+from NSEView.Old_Project.app import app
 
 def run_tests():
     """Run tests against the Flask app"""

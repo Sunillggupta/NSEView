@@ -1,4 +1,4 @@
-from nse_data import NSEDataFetcher
+from NSEView.Old_Project.nse_data import NSEDataFetcher
 
 def test_data():
     """

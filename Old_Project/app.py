@@ -3,7 +3,7 @@ NSE Data Web Application
 Displays NSE indices and equity data on web pages using Flask
 """
 from flask import Flask, render_template, jsonify, request
-from nse_data import NSEDataFetcher
+from NSEView.Old_Project.nse_data import NSEDataFetcher
 import json
 from datetime import datetime
 
