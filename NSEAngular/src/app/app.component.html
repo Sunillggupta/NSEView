@@ -1,0 +1,20 @@
+<div class="container">
+  <header class="app-header">
+    <h1>📊 NSE Data Dashboard</h1>
+    <p>Real-time National Stock Exchange India indices and market data</p>
+  </header>
+
+  <nav class="app-nav">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/about" routerLinkActive="active">About</a>
+    <a routerLink="/status" routerLinkActive="active">API Status</a>
+  </nav>
+
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+
+  <footer class="app-footer">
+    <p>&copy; {{ year }} NSE Data Dashboard | Powered by Angular | Data from Django REST API</p>
+  </footer>
+</div>

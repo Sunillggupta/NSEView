@@ -1,0 +1,98 @@
+<h2 class="page-title">📈 NSE Indices - Market Data</h2>
+
+<div class="info-box">
+  <strong>Total Indices:</strong> {{ total() }} |
+  <strong>Source:</strong> Django REST API
+</div>
+
+@if (refreshMessage()) {
+  <div class="success-box">{{ refreshMessage() }}</div>
+}
+
+@if (error()) {
+  <div class="error-box">
+    <strong>⚠️ {{ error() }}</strong>
+  </div>
+}
+
+<div class="btn-group">
+  <button class="btn" (click)="refresh()" [disabled]="refreshing()">
+    {{ refreshing() ? 'Refreshing…' : '🔄 Refresh from NSE' }}
+  </button>
+  <button class="btn btn-secondary" (click)="load()" [disabled]="loading()">Reload</button>
+</div>
+
+<div class="search-box">
+  <input
+    type="text"
+    [value]="search()"
+    (input)="onSearch($event)"
+    placeholder="Search indices by name (e.g., NIFTY 50, BANK, MIDCAP)..."
+  />
+</div>
+
+<div class="filter-buttons">
+  <button class="filter-btn" [class.active]="filter() === 'all'" (click)="setFilter('all')">
+    All Indices
+  </button>
+  <button
+    class="filter-btn"
+    [class.active]="filter() === 'derivative'"
+    (click)="setFilter('derivative')"
+  >
+    Derivatives Eligible
+  </button>
+  <button class="filter-btn" [class.active]="filter() === 'broad'" (click)="setFilter('broad')">
+    Broad Market
+  </button>
+</div>
+
+@if (loading()) {
+  <div class="spinner">Loading indices…</div>
+} @else {
+  <table>
+    <thead>
+      <tr>
+        <th>Index Name</th>
+        <th>Last Price</th>
+        <th>Change</th>
+        <th>% Change</th>
+        <th>Open</th>
+        <th>High</th>
+        <th>Low</th>
+        <th>P/E Ratio</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (idx of visible(); track idx.id) {
+        <tr>
+          <td>
+            <strong>{{ idx.name }}</strong><br />
+            <span class="muted">{{ idx.key }}</span>
+          </td>
+          <td class="price">{{ fmt(idx.last_price) }}</td>
+          <td>
+            <span [class]="signClass(idx.change)">{{ arrow(idx.change) }} {{ fmt(idx.change) }}</span>
+          </td>
+          <td>
+            <span [class]="signClass(idx.percent_change)">{{ fmt(idx.percent_change) }}%</span>
+          </td>
+          <td>{{ fmt(idx.open_price) }}</td>
+          <td>{{ fmt(idx.high_price) }}</td>
+          <td>{{ fmt(idx.low_price) }}</td>
+          <td>{{ idx.pe_ratio || 'N/A' }}</td>
+          <td>
+            <a [routerLink]="['/index', idx.symbol]" class="btn btn-sm">Details →</a>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="9" style="text-align: center; color: #999">No indices match your filter.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="timestamp">Showing {{ visible().length }} of {{ total() }} indices</div>
+}

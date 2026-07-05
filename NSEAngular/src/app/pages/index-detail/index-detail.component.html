@@ -1,0 +1,133 @@
+<a routerLink="/" class="btn btn-secondary" style="margin-bottom: 20px">← Back to All Indices</a>
+
+@if (loading()) {
+  <div class="spinner">Loading details…</div>
+}
+
+@if (error()) {
+  <div class="error-box"><strong>❌ {{ error() }}</strong></div>
+  <a routerLink="/" class="btn" style="margin-top: 10px">← Go Back to Indices</a>
+}
+
+@if (index(); as idx) {
+  <h2 class="page-title">{{ idx.name }} - Detailed Information</h2>
+
+  <div class="info-box"><strong>Category:</strong> {{ idx.key || 'N/A' }}</div>
+
+  <!-- Main stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>Last Price</h3>
+      <div class="value">{{ fmt(idx.last_price) }}</div>
+    </div>
+    <div class="stat-card">
+      <h3>Change</h3>
+      <div class="value" [style.color]="signStyle(idx.change)">
+        {{ arrow(idx.change) }} {{ fmt(idx.change) }}
+      </div>
+    </div>
+    <div class="stat-card">
+      <h3>Change %</h3>
+      <div class="value" [style.color]="signStyle(idx.percent_change)">
+        {{ fmt(idx.percent_change) }}%
+      </div>
+    </div>
+  </div>
+
+  <!-- OHLC -->
+  <h3 style="margin-top: 30px; margin-bottom: 15px; color: #667eea">OHLC Data &amp; 52-Week Range</h3>
+  <table>
+    <tr>
+      <th>Open</th>
+      <td class="price">{{ fmt(idx.open_price) }}</td>
+      <th>High</th>
+      <td class="price">{{ fmt(idx.high_price) }}</td>
+    </tr>
+    <tr>
+      <th>Low</th>
+      <td class="price">{{ fmt(idx.low_price) }}</td>
+      <th>Previous Close</th>
+      <td class="price">{{ fmt(idx.previous_close) }}</td>
+    </tr>
+    <tr>
+      <th>52-Week High</th>
+      <td class="price">{{ fmt(idx.year_high) }}</td>
+      <th>52-Week Low</th>
+      <td class="price">{{ fmt(idx.year_low) }}</td>
+    </tr>
+  </table>
+
+  <!-- Valuation -->
+  <h3 style="margin-top: 30px; margin-bottom: 15px; color: #667eea">Valuation Metrics</h3>
+  <table>
+    <tr>
+      <th>P/E Ratio</th>
+      <td>{{ idx.pe_ratio || 'N/A' }}</td>
+      <th>P/B Ratio</th>
+      <td>{{ idx.pb_ratio || 'N/A' }}</td>
+    </tr>
+    <tr>
+      <th>Dividend Yield</th>
+      <td>{{ idx.dividend_yield || 'N/A' }}</td>
+      <th>Category</th>
+      <td>{{ idx.key || 'N/A' }}</td>
+    </tr>
+  </table>
+
+  <!-- Market activity -->
+  <h3 style="margin-top: 30px; margin-bottom: 15px; color: #667eea">Market Activity</h3>
+  <table>
+    <tr>
+      <th>Advances</th>
+      <td class="positive">{{ idx.advances ?? 'N/A' }}</td>
+      <th>Declines</th>
+      <td class="negative">{{ idx.declines ?? 'N/A' }}</td>
+    </tr>
+    <tr>
+      <th>Unchanged</th>
+      <td>{{ idx.unchanged ?? 'N/A' }}</td>
+      <th>&nbsp;</th>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+
+  <!-- Performance -->
+  <h3 style="margin-top: 30px; margin-bottom: 15px; color: #667eea">Performance</h3>
+  <table>
+    <tr>
+      <th>30-Day Change</th>
+      <td [class]="signClass(idx.change_30d)">{{ fmt(idx.change_30d) }}%</td>
+      <th>365-Day Change</th>
+      <td [class]="signClass(idx.change_365d)">{{ fmt(idx.change_365d) }}%</td>
+    </tr>
+  </table>
+
+  <!-- History -->
+  @if (idx.history && idx.history.length) {
+    <h3 style="margin-top: 30px; margin-bottom: 15px; color: #667eea">
+      Recent History ({{ idx.history.length }})
+    </h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Price</th>
+          <th>Change</th>
+          <th>% Change</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (h of idx.history; track h.id) {
+          <tr>
+            <td>{{ h.timestamp | date: 'medium' }}</td>
+            <td class="price">{{ fmt(h.price) }}</td>
+            <td [class]="signClass(h.change)">{{ fmt(h.change) }}</td>
+            <td [class]="signClass(h.percent_change)">{{ fmt(h.percent_change) }}%</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <div class="timestamp">Last updated: {{ idx.last_updated | date: 'medium' }}</div>
+}

@@ -1,0 +1,60 @@
+<h2 class="page-title">🩺 API Status</h2>
+
+<div class="btn-group">
+  <button class="btn" (click)="reload()" [disabled]="loading()">
+    {{ loading() ? 'Checking…' : 'Re-check' }}
+  </button>
+</div>
+
+@if (loading()) {
+  <div class="spinner">Checking API status…</div>
+} @else {
+  @if (error()) {
+    <div class="error-box"><strong>⚠️ {{ error() }}</strong></div>
+  }
+
+  @if (health(); as h) {
+    <div class="success-box">
+      <strong>✅ Health:</strong> {{ h.status }} &nbsp;|&nbsp;
+      <strong>Database:</strong> {{ h.database }} &nbsp;|&nbsp;
+      <strong>API:</strong> {{ h.api }}
+    </div>
+  }
+
+  @if (status(); as s) {
+    <div class="info-box">
+      <strong>Status:</strong> {{ s.status }}<br />
+      <strong>Message:</strong> {{ s.message }}
+      @if (s.available_indices !== undefined) {
+        <br /><strong>Available Indices:</strong> {{ s.available_indices }}
+      }
+      @if (s.timestamp) {
+        <br /><strong>Source Timestamp:</strong> {{ s.timestamp }}
+      }
+    </div>
+
+    @if (s.endpoints) {
+      <h3 style="margin-top: 20px; margin-bottom: 10px; color: #667eea">Endpoints</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Endpoint</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (entry of s.endpoints | keyvalue; track entry.key) {
+            <tr>
+              <td><code>{{ entry.key }}</code></td>
+              <td>{{ entry.value }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+
+    @if (s.note) {
+      <div class="info-box" style="margin-top: 20px"><strong>Note:</strong> {{ s.note }}</div>
+    }
+  }
+}

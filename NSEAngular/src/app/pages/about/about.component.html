@@ -1,0 +1,113 @@
+<h2 class="page-title">📖 About NSE Data Dashboard</h2>
+
+<div style="line-height: 1.8; color: #555">
+  <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px">About This Application</h3>
+  <p>
+    The NSE Data Dashboard is a single-page application built with <strong>Angular</strong> that
+    displays market data from the National Stock Exchange (NSE) of India. The UI consumes a
+    <strong>Django REST Framework</strong> API, which fetches and stores data from NSE's public
+    <code>allIndices</code> endpoint.
+  </p>
+
+  <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px">Features</h3>
+  <ul style="margin-left: 20px">
+    <li><strong>139+ Indices:</strong> NIFTY 50, NIFTY BANK, NIFTY MIDCAP, and many more</li>
+    <li><strong>Live Data:</strong> Current prices, changes, and percentage changes</li>
+    <li><strong>Detailed Metrics:</strong> OHLC data, P/E ratios, P/B ratios, dividend yields</li>
+    <li><strong>Performance Tracking:</strong> 30-day and 365-day performance data</li>
+    <li><strong>Historical Snapshots:</strong> Price history recorded on every refresh</li>
+    <li><strong>Search &amp; Filter:</strong> Instant client-side search and category filters</li>
+    <li><strong>Responsive Design:</strong> Works on desktop and mobile devices</li>
+  </ul>
+
+  <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px">Technical Stack</h3>
+  <div style="background: #f8f9fa; padding: 15px; border-radius: 4px">
+    <strong>Frontend:</strong> Angular 19 (standalone components, signals)<br />
+    <strong>Backend:</strong> Django 5 + Django REST Framework<br />
+    <strong>Database:</strong> SQLite (indices + history snapshots)<br />
+    <strong>Data Source:</strong> NSE allIndices API<br />
+  </div>
+
+  <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px">API Endpoints (Django)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Endpoint</th>
+        <th>Description</th>
+        <th>Returns</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>GET /api/indices/</code></td>
+        <td>Paginated list of all indices</td>
+        <td>JSON</td>
+      </tr>
+      <tr>
+        <td><code>GET /api/indices/&lt;symbol&gt;/</code></td>
+        <td>Detailed data for a specific index</td>
+        <td>JSON</td>
+      </tr>
+      <tr>
+        <td><code>GET /api/indices/&lt;symbol&gt;/history/</code></td>
+        <td>Historical snapshots for an index</td>
+        <td>JSON</td>
+      </tr>
+      <tr>
+        <td><code>GET /api/indices/refresh/</code></td>
+        <td>Pull fresh data from NSE into the database</td>
+        <td>JSON</td>
+      </tr>
+      <tr>
+        <td><code>GET /api/status/status/</code></td>
+        <td>Overall API status and endpoint availability</td>
+        <td>JSON</td>
+      </tr>
+      <tr>
+        <td><code>GET /api/status/health/</code></td>
+        <td>Simple health check</td>
+        <td>JSON</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px">Important: API Limitations</h3>
+  <div class="error-box">
+    <h4 style="margin-bottom: 10px">Individual Equity Stock Quotes</h4>
+    <p><strong>Status:</strong> Not Available</p>
+    <p>
+      NSE has blocked direct API access to individual equity stock quotes. The endpoint
+      <code>https://www.nseindia.com/api/quote-equity?symbol=SYMBOL</code> returns HTTP 403 (Access
+      Denied). This dashboard therefore focuses on index-level data.
+    </p>
+  </div>
+
+  <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px">Available Data</h3>
+  <div class="success-box">
+    <strong>NSE allIndices Endpoint - WORKING ✅</strong>
+    <p style="margin-top: 10px">
+      The primary data source is NSE's official <code>/api/allIndices</code> endpoint, providing
+      price data, OHLC, 52-week highs/lows, valuation metrics, and market activity for 139+ indices.
+    </p>
+  </div>
+
+  <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px">How to Use</h3>
+  <ol style="margin-left: 20px">
+    <li><strong>Browse Indices:</strong> The home page lists every index in a searchable table</li>
+    <li><strong>Search:</strong> Use the search box to filter indices by name</li>
+    <li><strong>Filter by Category:</strong> Toggle Derivatives / Broad Market filters</li>
+    <li><strong>View Details:</strong> Click "Details →" on any index for full metrics and history</li>
+    <li><strong>Refresh:</strong> Use "Refresh from NSE" to pull the latest data into the backend</li>
+  </ol>
+
+  <h3 style="color: #667eea; margin-top: 20px; margin-bottom: 10px">Links</h3>
+  <ul style="margin-left: 20px">
+    <li><a href="https://www.nseindia.com" target="_blank" rel="noopener">NSE Official Website</a></li>
+    <li><a href="https://www.nseindia.com/api" target="_blank" rel="noopener">NSE API Documentation</a></li>
+  </ul>
+
+  <div style="margin-top: 30px">
+    <a routerLink="/" class="btn">← Back to Dashboard</a>
+    <a routerLink="/status" class="btn btn-secondary">Check API Status →</a>
+  </div>
+</div>
